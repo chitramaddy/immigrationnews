@@ -1,7 +1,7 @@
-var mangoose = require("mangoose");
+var mongoose = require("mongoose");
 
 //refernce to Schema constructor
-var Schema = mangoose.Schema;
+var Schema = mongoose.Schema;
 
 //new schema for comments
 var CommentSchema = new Schema({
@@ -11,7 +11,7 @@ var CommentSchema = new Schema({
 });
 
 //Create the model using mongoose
-var Comment = mangoose.model("Comment", CommentSchema);
+var Comment = mongoose.model("Comment", CommentSchema);
 
 //Export the model
 module.exports = Comment;

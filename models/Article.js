@@ -1,7 +1,7 @@
-var mangoose = require("mongoose");
+var mongoose = require("mongoose");
 
-//ref to the schema constructor. this is a mangoose method.
-var Schema = mangoose.Schema;
+//ref to the schema constructor. this is a mongoose method.
+var Schema = mongoose.Schema;
 
 //new schema for articles
 var ArticleSchema = new Schema({
@@ -25,7 +25,7 @@ var ArticleSchema = new Schema({
     }]
 });
 
-var Article = mangoose.model("Article", ArticleSchema);
+var Article = mongoose.model("Article", ArticleSchema);
 
 //export the Article model
 module.exports = Article;
