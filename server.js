@@ -30,6 +30,11 @@ var db = require("./models");
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/immigrationnews");
 
+//this is the root route. This will display the index page
+app.get("/", function(req, res){
+  res.render("index");
+})
+
 app.get("/all", function (req, res) {
   //  request call to grab the HTML body from VisaPro
   request("http://www.visapro.com/resources/article/", function (error, response, html) {
