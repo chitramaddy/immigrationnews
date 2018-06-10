@@ -31,7 +31,7 @@ var db = require("./models");
 mongoose.connect("mongodb://localhost/immigrationnews");
 
 //this is the root route. This will display the index page
-app.get("/", function(req, res){
+app.get("/", function (req, res) {
   res.render("index");
 })
 
@@ -55,20 +55,22 @@ app.get("/all", function (req, res) {
       var title = $(element).children().attr("alt");
 
       // Save these results in an object that we'll push into the results array we defined earlier
-
       results.push({
         title: title,
         link: link,
+        img: img
         //comments: "There are 0 comments"
       });
     });
 
+    //creating the article collection with the scraped results
     db.Article.create(results)
+
+    //send the results to front end
       .then(function (results) {
-        console.log(results);
-        res.json(results);
+        res.render("index", {results:results});
       }).catch(function (err) {
-        console.log(err.message);
+        res.send("You do not have any new articles");
       });
   });
 
@@ -77,29 +79,29 @@ app.get("/all", function (req, res) {
 //Route for saving/updating comments associated with an article
 app.get("/articles/:id", function (req, res) {
 
-      //Create a Comment and pass the req.body
-      db.Comment.create(req.body)
-        .then(function (dbComment) {
+  //Create a Comment and pass the req.body
+  db.Comment.create(req.body)
+    .then(function (dbComment) {
 
-          //Find the Article with _id that matches req.params.id and push the new comment in to the array of comments
-          return db.Article.findOneAndUpdate({
-            _id: req.params.id
-          }, {
-            $push: {
-              comment: dbComment._id
-            }
-          }, {
-            new: true
-          }); 
-        }).then(function (dbArticle) {
-          res.json(dbArticle);
-        }).catch(function (err) {
-          res.json(err);
-        })
+      //Find the Article with _id that matches req.params.id and push the new comment in to the array of comments
+      return db.Article.findOneAndUpdate({
+        _id: req.params.id
+      }, {
+        $push: {
+          comment: dbComment._id
+        }
+      }, {
+        new: true
       });
+    }).then(function (dbArticle) {
+      res.json(dbArticle);
+    }).catch(function (err) {
+      res.json(err);
+    })
+});
 
 
-      // Set the app to listen on port 3000
-      app.listen(3000, function () {
-        console.log("App running on port 3000!");
-      });
+// Set the app to listen on port 3000
+app.listen(3000, function () {
+  console.log("App running on port 3000!");
+});

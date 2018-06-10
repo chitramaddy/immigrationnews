@@ -1,4 +1,3 @@
-
 <div class="wrapper">
 
     <div class="hero">
@@ -8,12 +7,20 @@
                 <h1>Immigration News</h1>
                 <button class="btn btn-primary" id="scrapeArt" type="submit">Scrape New Articles</button>
             </div>
-            
+
         </div>
 
     </div>
 
+<!--Articles scraped gets displayed here-->
     <div id="article-area">
+        {{#each results}}
+        <li>
+            <p >Title: {{this.title}}</p>
+            <img src={{this.img}} />
+            <button data-artId="{{this._id}}" class="saveArt">Save Article!</button>
+        </li>
+        {{/each}}
     </div>
 
 </div>
