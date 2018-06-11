@@ -5,6 +5,7 @@
         <div class="header">
             <div class="title">
                 <h1>Immigration News</h1>
+                <button class="btn btn-primary" id="saved" type="submit">Saved Articles</button>
                 <button class="btn btn-primary" id="scrapeArt" type="submit">Scrape New Articles</button>
             </div>
 
@@ -12,14 +13,17 @@
 
     </div>
 
-<!--Articles scraped gets displayed here-->
+    <!--Articles scraped gets displayed here-->
     <div id="article-area">
         {{#each results}}
-        <li>
-            <p >Title: {{this.title}}</p>
+        <ul>
+            <p><a href={{this.link}}></a>{{this.title}}
+            </p>
             <img src={{this.img}} />
-            <button data-artid="{{this._id}}" class="saveArt">Save Article!</button>
-        </li>
+            <button class="saveArt" data-artid="{{this._id}}">Save Article!</button>
+            
+        </ul>
+
         {{/each}}
     </div>
 

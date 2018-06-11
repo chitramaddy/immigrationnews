@@ -13,8 +13,7 @@ var ArticleSchema = new Schema({
 
     //link to the article
     link: {
-        type: String,
-        required: true
+        type: String
     },
 
     //'comment' stores the object_id associated with each article. 

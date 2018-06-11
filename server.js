@@ -35,6 +35,13 @@ app.get("/", function (req, res) {
   res.render("index");
 })
 
+
+app.get("/x", function (req, res) {
+  db.Article.find().count(function (err, count) {
+    if (err) return handleError(err);
+    console.log("You have %d new articles", count);
+  })
+})
 app.get("/all", function (req, res) {
   //  request call to grab the HTML body from VisaPro
   request("http://www.visapro.com/resources/article/", function (error, response, html) {
@@ -63,31 +70,28 @@ app.get("/all", function (req, res) {
       });
     });
 
-    //creating the article collection with the scraped results
-    db.Article.create(results)
-    //send the results to front end
-      .then(function (results) {
-        console.log(results)
-        res.render("index", {results: results});
-      }).catch(function (err) {
-        res.send("You do not have any new articles");
-      });
+    //Send the results to the front end to display
+    res.render("index", {
+      results: results
+    });
   });
 
 });
 
 //Route for saving an article to the saved articles page
-app.get("/savedarticles", function(req, res){
-  console.log(req.params);
-  //find the article with the id from the database and save it to the saved article page
-  db.articles.findOne({
-    id: req.params.id
-  }).then(function(results){
-    res.render("saved", {results: results});
-  }).catch(function(err){
-    res.json(err);
-  })
+app.post("/savedarticles", function (req, res) {
+  //Taking the info from Ajax call, save it in to articles collection
+  db.Article.create(req.body, function (err, results) {
+
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(results);
+    }
+  });
 });
+
+
 
 // //Route for saving/updating comments associated with an article
 // app.get("/articles/:id", function (req, res) {
