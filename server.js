@@ -65,10 +65,10 @@ app.get("/all", function (req, res) {
 
     //creating the article collection with the scraped results
     db.Article.create(results)
-
     //send the results to front end
       .then(function (results) {
-        res.render("index", {results:results});
+        console.log(results)
+        res.render("index", {results: results});
       }).catch(function (err) {
         res.send("You do not have any new articles");
       });
@@ -76,29 +76,42 @@ app.get("/all", function (req, res) {
 
 });
 
-//Route for saving/updating comments associated with an article
-app.get("/articles/:id", function (req, res) {
-
-  //Create a Comment and pass the req.body
-  db.Comment.create(req.body)
-    .then(function (dbComment) {
-
-      //Find the Article with _id that matches req.params.id and push the new comment in to the array of comments
-      return db.Article.findOneAndUpdate({
-        _id: req.params.id
-      }, {
-        $push: {
-          comment: dbComment._id
-        }
-      }, {
-        new: true
-      });
-    }).then(function (dbArticle) {
-      res.json(dbArticle);
-    }).catch(function (err) {
-      res.json(err);
-    })
+//Route for saving an article to the saved articles page
+app.get("/savedarticles", function(req, res){
+  console.log(req.params);
+  //find the article with the id from the database and save it to the saved article page
+  db.articles.findOne({
+    id: req.params.id
+  }).then(function(results){
+    res.render("saved", {results: results});
+  }).catch(function(err){
+    res.json(err);
+  })
 });
+
+// //Route for saving/updating comments associated with an article
+// app.get("/articles/:id", function (req, res) {
+
+//   //Create a Comment and pass the req.body
+//   db.Comment.create(req.body)
+//     .then(function (dbComment) {
+
+//       //Find the Article with _id that matches req.params.id and push the new comment in to the array of comments
+//       return db.Article.findOneAndUpdate({
+//         _id: req.params.id
+//       }, {
+//         $push: {
+//           comment: dbComment._id
+//         }
+//       }, {
+//         new: true
+//       });
+//     }).then(function (dbArticle) {
+//       res.json(dbArticle);
+//     }).catch(function (err) {
+//       res.json(err);
+//     })
+// });
 
 
 // Set the app to listen on port 3000
